@@ -16,10 +16,11 @@
   <img src="https://img.shields.io/badge/Android-SDK_24%2B-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android SDK" />
   <img src="https://img.shields.io/badge/Firebase-AI_%26_Firestore-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" alt="Firebase" />
   <img src="https://img.shields.io/badge/Storage-Room_SQLite-009688?style=for-the-badge" alt="Room DB" />
-  <img src="https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge" alt="License" />
+  <a href="https://lavenderblush-monkey-546500.hostingersite.com/"><img src="https://img.shields.io/badge/Developer-Portfolio-FF5722?style=for-the-badge&logo=google-chrome&logoColor=white" alt="Portfolio" /></a>
 </p>
 
 ---
+
 
 ## 📸 App Preview
 
@@ -155,6 +156,9 @@ FlowBuilder comes with several ready-to-use workflows right out of the box:
 
 ---
 
-## 📜 License
+## 👨‍💻 Developer & Access
 
-This project is licensed under the [MIT License](LICENSE).
+This application is developed by **Muhammad Sufyan**. All rights reserved.
+
+For project access, inquiries, or collaborations, please visit:
+* 🌐 **Portfolio**: [lavenderblush-monkey-546500.hostingersite.com](https://lavenderblush-monkey-546500.hostingersite.com/)
