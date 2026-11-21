@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">FlowBuilder</string>
+    <string name="app_tagline">Smart Flowchart Studio</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_projects">Projects</string>
+    <string name="nav_templates">Templates</string>
+    <string name="nav_settings">Settings</string>
+    <string name="create_new_flowchart">Create New Flowchart</string>
+    <string name="recent_projects">Recent Projects</string>
+    <string name="my_flowcharts">My Flowcharts</string>
+    <string name="templates_library">Templates Library</string>
+    <string name="search_hint">Search flowcharts &amp; templates…</string>
+    <string name="empty_projects_title">No flowcharts yet</string>
+    <string name="empty_projects_subtitle">Start from a blank canvas or pick a ready-made template to build your first algorithm.</string>
+    <string name="empty_search_title">No matching diagrams</string>
+    <string name="empty_search_subtitle">Try a different keyword or create a fresh flowchart.</string>
+    <string name="status_saved">Saved locally</string>
+    <string name="status_saving">Saving…</string>
+    <string name="offline_badge">100% Offline</string>
+</resources>

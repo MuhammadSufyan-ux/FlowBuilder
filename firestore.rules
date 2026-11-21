@@ -1,0 +1,97 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: default deny everything
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidUserProfile(data, userId) {
+      return data.userId is string && data.userId == userId &&
+        data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 80 &&
+        (!('subtitle' in data) || (data.subtitle is string && data.subtitle.size() <= 120)) &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 160)) &&
+        (!('photoUrl' in data) || (data.photoUrl is string && data.photoUrl.size() <= 600)) &&
+        data.createdAt is timestamp && data.createdAt <= request.time &&
+        data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidFlowProject(data, userId) {
+      return data.userId is string && data.userId == userId &&
+        data.title is string && data.title.size() >= 1 && data.title.size() <= 120 &&
+        data.description is string && data.description.size() <= 500 &&
+        data.category is string && data.category.size() >= 1 && data.category.size() <= 50 &&
+        data.favorite is bool &&
+        data.gridStyle in ['PLUS', 'DOTS', 'LINES', 'NONE'] &&
+        data.snapToGrid is bool &&
+        data.nodes is list && data.nodes.size() <= 500 &&
+        (data.nodes.size() == 0 || data.nodes[0] is map) &&
+        data.edges is list && data.edges.size() <= 1000 &&
+        (data.edges.size() == 0 || data.edges[0] is map) &&
+        data.createdAt is timestamp && data.createdAt <= request.time &&
+        data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId} {
+      allow get: if isOwner(userId) && isValidId(userId);
+      allow list: if false;
+
+      allow create: if isOwner(userId) &&
+        isValidId(userId) &&
+        incoming().keys().hasAll(['userId', 'displayName', 'createdAt', 'updatedAt']) &&
+        incoming().keys().hasOnly(['userId', 'displayName', 'subtitle', 'email', 'photoUrl', 'createdAt', 'updatedAt']) &&
+        isValidUserProfile(incoming(), userId);
+
+      allow update: if isOwner(userId) &&
+        isValidId(userId) &&
+        isValidUserProfile(incoming(), userId) &&
+        incoming().userId == existing().userId &&
+        incoming().createdAt == existing().createdAt &&
+        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'subtitle', 'email', 'photoUrl', 'updatedAt']);
+
+      allow delete: if isOwner(userId) && isValidId(userId);
+
+      match /projects/{projectId} {
+        allow get: if isOwner(userId) && isValidId(projectId);
+        allow list: if isOwner(userId);
+
+        allow create: if isOwner(userId) &&
+          isValidId(projectId) &&
+          incoming().keys().hasAll(['userId', 'title', 'description', 'category', 'favorite', 'gridStyle', 'snapToGrid', 'nodes', 'edges', 'createdAt', 'updatedAt']) &&
+          incoming().keys().hasOnly(['userId', 'title', 'description', 'category', 'favorite', 'gridStyle', 'snapToGrid', 'nodes', 'edges', 'createdAt', 'updatedAt']) &&
+          isValidFlowProject(incoming(), userId);
+
+        allow update: if isOwner(userId) &&
+          isValidId(projectId) &&
+          isValidFlowProject(incoming(), userId) &&
+          incoming().userId == existing().userId &&
+          incoming().createdAt == existing().createdAt &&
+          incoming().diff(existing()).affectedKeys().hasOnly(['title', 'description', 'category', 'favorite', 'gridStyle', 'snapToGrid', 'nodes', 'edges', 'updatedAt']);
+
+        allow delete: if isOwner(userId) && isValidId(projectId);
+      }
+    }
+  }
+}

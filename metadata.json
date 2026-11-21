@@ -1,0 +1,6 @@
+{
+  "name": "FlowBuilder",
+  "description": "Offline-first visual flowchart maker and algorithm diagram studio with smart layout, validation, templates, and PNG/PDF/JSON export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

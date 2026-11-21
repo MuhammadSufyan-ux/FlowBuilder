@@ -1,0 +1,107 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Authenticated FlowBuilder user profile",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Firebase Auth UID of the profile owner"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "User display name"
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "User bio or role tagline"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "photoUrl": {
+          "type": "string",
+          "description": "Optional profile avatar URL"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created (FieldValue.serverTimestamp())"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last updated (FieldValue.serverTimestamp())"
+        }
+      },
+      "required": ["userId", "displayName", "createdAt", "updatedAt"]
+    },
+    "FlowProjectDoc": {
+      "title": "FlowProjectDoc",
+      "description": "Cloud-synced FlowBuilder diagram project belonging to a user",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner Firebase Auth UID"
+        },
+        "title": {
+          "type": "string",
+          "description": "Project title"
+        },
+        "description": {
+          "type": "string",
+          "description": "Short project description"
+        },
+        "category": {
+          "type": "string",
+          "description": "Project category"
+        },
+        "favorite": {
+          "type": "boolean",
+          "description": "Whether project is starred"
+        },
+        "gridStyle": {
+          "type": "string",
+          "enum": ["PLUS", "DOTS", "LINES", "NONE"],
+          "description": "Canvas grid visual style"
+        },
+        "snapToGrid": {
+          "type": "boolean",
+          "description": "Snap shapes to grid toggle"
+        },
+        "nodes": {
+          "type": "array",
+          "description": "List of native node maps on the flowchart canvas"
+        },
+        "edges": {
+          "type": "array",
+          "description": "List of native edge maps connecting nodes"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when created (FieldValue.serverTimestamp())"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when last updated (FieldValue.serverTimestamp())"
+        }
+      },
+      "required": ["userId", "title", "description", "category", "favorite", "gridStyle", "snapToGrid", "nodes", "edges", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user profile document owned by userId"
+    },
+    "/users/{userId}/projects/{projectId}": {
+      "schema": { "$ref": "#/entities/FlowProjectDoc" },
+      "description": "Realtime cloud-synced flowchart projects owned by userId"
+    }
+  }
+}
